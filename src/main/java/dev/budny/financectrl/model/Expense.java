@@ -17,14 +17,15 @@ public class Expense {
     private String desc;
     private BigDecimal value;
     private LocalDate date;
+    private Long userId;
 
     public Expense(){}
 
-    public Expense(Long id, String desc, BigDecimal value, LocalDate date){
-        this.id = id;
+    public Expense(String desc, BigDecimal value, LocalDate date, Long userId){
         this.desc = desc;
         this.value = value;
         this.date = date;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -43,6 +44,10 @@ public class Expense {
         return date;
     }
 
+    public Long getUserId(){
+        return userId;
+    }
+
     public void setDesc(String desc) {
         this.desc = desc;
     }
@@ -53,6 +58,10 @@ public class Expense {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setUserId(Long userId){
+        this.userId = userId;
     }
 
 }

@@ -28,26 +28,39 @@ public class ExpenseService {
     }
 
     //put
-    public Expense update(Long id, String desc, BigDecimal value, LocalDate date){
+    public Expense update(Long id, String desc, BigDecimal value, LocalDate date, Long userId){
         Optional<Expense> expenseOptional = expenseRepository.findById(id);
         if(expenseOptional.isPresent()){
             Expense expense = expenseOptional.get();
             expense.setDesc(desc);
             expense.setValue(value);
             expense.setDate(date);
+            expense.setUserId(userId);
             return expenseRepository.save(expense);
         }
         return null;
     }
 
     //get all
-    public List<Expense> getAll(){
-        return expenseRepository.findAll();
+    public List<Expense> getAll(Long userId){
+        List<Expense> expenseList = expenseRepository.findAll();
+        for(Expense exp : expenseList){
+            if(!exp.getUserId().equals(userId)){
+                expenseList.remove(exp);
+            }
+        }
+        return expenseList;
     }
 
-    //get
-    public Optional<Expense> getExp(Long id){
-        return expenseRepository.findById(id);
+    //get by month
+    public List<Expense> getMonth(Long userId, int month){
+        List<Expense> expenseListMonth = getAll(userId);
+        for(Expense exp : expenseListMonth){
+            if(exp.getDate().getMonthValue() != month){
+                expenseListMonth.remove(exp);
+            }
+        }
+        return expenseListMonth;
     }
 
     //delete
@@ -57,6 +70,9 @@ public class ExpenseService {
 
     //delete user expenses
     public void deleteAll(Long user_id){
-
+        List<Expense> expenseList = getAll(user_id);
+        for(Expense exp : expenseList){
+            expenseRepository.delete(exp);
+        }
     }
 }
