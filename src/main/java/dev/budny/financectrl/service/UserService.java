@@ -5,6 +5,8 @@ import dev.budny.financectrl.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -19,12 +21,25 @@ public class UserService {
 
     //create user
     public User save(User user){
-        return save(user);
+        if(validateUser(user.getName()) != null){
+            return null;
+        }
+        return userRepository.save(user);
     }
 
     //delete user
     public void delete(Long id){
         userRepository.deleteById(id);
         expenseService.deleteAll(id);
+    }
+
+    public Long validateUser(String name){
+        List<User> userList = userRepository.findAll();
+        for(User u : userList){
+            if (u.getName().equals(name)){
+                return u.getId();
+            }
+        }
+        return null;
     }
 }

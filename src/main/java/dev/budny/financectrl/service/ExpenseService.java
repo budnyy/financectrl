@@ -14,12 +14,10 @@ import java.util.Optional;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final UserService userService;
 
     @Autowired
-    public ExpenseService(ExpenseRepository expenseRepository, UserService userService){
+    public ExpenseService(ExpenseRepository expenseRepository){
         this.expenseRepository = expenseRepository;
-        this.userService = userService;
     }
 
     //post
@@ -28,14 +26,13 @@ public class ExpenseService {
     }
 
     //put
-    public Expense update(Long id, String desc, BigDecimal value, LocalDate date, Long userId){
+    public Expense update(Long id, String desc, BigDecimal value, LocalDate date){
         Optional<Expense> expenseOptional = expenseRepository.findById(id);
         if(expenseOptional.isPresent()){
             Expense expense = expenseOptional.get();
-            expense.setDesc(desc);
+            expense.setDescr(desc);
             expense.setValue(value);
             expense.setDate(date);
-            expense.setUserId(userId);
             return expenseRepository.save(expense);
         }
         return null;
@@ -43,24 +40,33 @@ public class ExpenseService {
 
     //get all
     public List<Expense> getAll(Long userId){
-        List<Expense> expenseList = expenseRepository.findAll();
-        for(Expense exp : expenseList){
-            if(!exp.getUserId().equals(userId)){
-                expenseList.remove(exp);
-            }
-        }
-        return expenseList;
+        return expenseRepository.getAllByUserId(userId);
+    }
+
+    //get sum
+    public BigDecimal sumAllByUserId(Long userId){
+        return expenseRepository.sumAllByUserId(userId);
     }
 
     //get by month
     public List<Expense> getMonth(Long userId, int month){
-        List<Expense> expenseListMonth = getAll(userId);
+        List<Expense> expenseListMonth = expenseRepository.getAllByUserId(userId);
         for(Expense exp : expenseListMonth){
             if(exp.getDate().getMonthValue() != month){
                 expenseListMonth.remove(exp);
             }
         }
         return expenseListMonth;
+    }
+
+    //get sum month
+    public BigDecimal sumAllMonth(Long userId, int month){
+        List<Expense> expenseList = getMonth(userId, month);
+        BigDecimal sum = new BigDecimal("0");
+        for(Expense e : expenseList) {
+            sum = sum.add(e.getValue());
+        }
+        return sum;
     }
 
     //delete

@@ -5,6 +5,7 @@ import dev.budny.financectrl.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,24 +20,38 @@ public class ExpenseController {
     @Autowired
     ExpenseController(ExpenseService expenseService){this.expenseService = expenseService;}
 
+    @GetMapping
+    public String renderExpense(Model model, @RequestParam Long userId, @RequestParam(required = false) Integer month){
+        List<Expense> expenseList = getAll(userId);
+
+        if(month == null){
+            month = LocalDate.now().getMonthValue();
+        }
+
+        model.addAttribute("expenses",expenseList);
+        model.addAttribute("sum", expenseService.sumAllByUserId(userId));
+        model.addAttribute("month", month);
+        model.addAttribute("monthsum", expenseService.sumAllMonth(userId, month));
+        return "home";
+    }
+
     @PostMapping("/save")
-    public Expense save(@RequestBody String desc, BigDecimal value, LocalDate date, Long userId){
-        Expense expense = new Expense(desc, value, date, userId);
+    public Expense save(@RequestBody Expense expense){
         return expenseService.save(expense);
     }
 
     @PutMapping("/update")
-    public Expense update(@RequestBody Long id, String desc, BigDecimal value, LocalDate date, Long userId){
-        return expenseService.update(id, desc, value, date, userId);
+    public Expense update(@RequestBody Long id, @RequestBody String descr, @RequestBody BigDecimal value, @RequestBody LocalDate date){
+        return expenseService.update(id, descr, value, date);
     }
 
     @GetMapping("/home")
-    public List<Expense> getAll(@RequestBody Long userId){
+    public List<Expense> getAll(@RequestParam Long userId){
         return expenseService.getAll(userId);
     }
 
-    @GetMapping("/home/{id}")
-    public List<Expense> getExp(@RequestBody Long userId, int month){
+    @GetMapping("/home/{month}")
+    public List<Expense> getExp(@RequestBody Long userId, @RequestBody int month){
         return expenseService.getMonth(userId, month);
     }
 

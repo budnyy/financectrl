@@ -1,13 +1,9 @@
 package dev.budny.financectrl.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "user_table")
+@Table(name = "user_table", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +15,10 @@ public class User {
     public User(String name){
         this.name = name;
     }
+
+    public Long getId() {return id;}
+
+    public String getName(){return name;}
+
+    public void setName(String name) {this.name = name;}
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div>
+        <h1>financectrl</h1>
+        <h2>Expense dashboard</h2>
+        <h2 th:text="@{sum}"></h2>
+        <p th:text="@{monthsum}"></p>
+        <form id="changeMonth">
+            <label for="month">Change month</label>
+            <input type="month" name="month" id="month">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div>
+        <table id="getTable">
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            <tr th:each="expense : ${expenses}">
+                <td th:each="${expense.descr}"></td>
+                <td th:each="${expense.value}"></td>
+                <td th:each="${expense.date}"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h3>ADD/UPDATE/DELETE Expense</h3>
+        <form id="expenseOp">
+            <input type="text" name="descr" id="descrExp">
+            <input type="number" name="value" id="valueExp">
+            <input type="date" name="date" id="dateExp">
+            <input type="hidden" name="id" id="idExp" value="">
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div>
+        <h3>Download table as CSV file (not yet implemented)</h3>
+        <button>Download CSV</button>
+    </div>
+    <p id="test"></p>
+    <script src="resources/scripts/dashboard.js"></script>
+</body>
+</html>

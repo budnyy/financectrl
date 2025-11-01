@@ -1,9 +1,8 @@
 package dev.budny.financectrl.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,15 +13,16 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    private String desc;
+    private String descr;
     private BigDecimal value;
     private LocalDate date;
     private Long userId;
 
     public Expense(){}
 
-    public Expense(String desc, BigDecimal value, LocalDate date, Long userId){
-        this.desc = desc;
+    @JsonCreator
+    public Expense(String descr, BigDecimal value, LocalDate date, Long userId) {
+        this.descr = descr;
         this.value = value;
         this.date = date;
         this.userId = userId;
@@ -32,8 +32,8 @@ public class Expense {
         return id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescr() {
+        return descr;
     }
 
     public BigDecimal getValue() {
@@ -48,8 +48,8 @@ public class Expense {
         return userId;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescr(String descr) {
+        this.descr = descr;
     }
 
     public void setValue(BigDecimal value) {
