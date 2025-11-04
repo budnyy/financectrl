@@ -3,7 +3,6 @@ package dev.budny.financectrl.controller;
 import dev.budny.financectrl.model.Expense;
 import dev.budny.financectrl.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
@@ -32,6 +31,7 @@ public class ExpenseController {
         model.addAttribute("sum", expenseService.sumAllByUserId(userId));
         model.addAttribute("month", month);
         model.addAttribute("monthsum", expenseService.sumAllMonth(userId, month));
+        model.addAttribute("userId", userId);
         return "home";
     }
 
