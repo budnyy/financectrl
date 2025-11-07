@@ -75,8 +75,8 @@ public class ExpenseService {
     }
 
     //delete user expenses
-    public void deleteAll(Long user_id){
-        List<Expense> expenseList = getAll(user_id);
+    public void deleteAll(Long userId){
+        List<Expense> expenseList = getAll(userId);
         for(Expense exp : expenseList){
             expenseRepository.delete(exp);
         }

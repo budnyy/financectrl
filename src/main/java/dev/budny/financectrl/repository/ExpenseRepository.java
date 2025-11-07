@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    @Query("SELECT SUM(e.value) FROM Expense e WHERE e.userId =:userId")
+    @Query("SELECT SUM(e.value) FROM Expense e WHERE e.userId =:#{#userId}")
     public BigDecimal sumAllByUserId(Long userId);
 
-    @Query("SELECT e.descr, e.value, e.date FROM Expense e WHERE e.userId =: userId")
+    @Query("SELECT e FROM Expense e WHERE e.userId =:#{#userId}")
     public List<Expense> getAllByUserId(Long userId);
 
 }

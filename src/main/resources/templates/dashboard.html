@@ -34,11 +34,11 @@
     <div>
         <h3>ADD/UPDATE/DELETE Expense</h3>
         <form id="expenseOp">
-            <input type="text" name="descr" id="descrExp">
-            <input type="number" name="value_" id="valueExp">
-            <input type="date" name="date" id="dateExp">
-            <input type="hidden" name="userId" id="userId" th:value="${userId}">
-            <input type="hidden" name="id" id="idExp" value="">
+            <input type="text" name="descrForm" id="descrExp">
+            <input type="number" name="valueForm" id="valueExp" step="0.01">
+            <input type="date" name="dateForm" id="dateExp">
+            <input type="hidden" name="userIdForm" id="userId" th:value="${userId}">
+            <input type="hidden" name="idForm" id="idExp" value="">
             <button type="submit">Save</button>
         </form>
     </div>
@@ -47,6 +47,9 @@
         <button>Download CSV</button>
     </div>
     <p id="test"></p>
-    <script src="resources/scripts/dashboard.js"></script>
+    <script th:inline="javascript">
+        const currUID = [[${userId}]]
+    </script>
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>

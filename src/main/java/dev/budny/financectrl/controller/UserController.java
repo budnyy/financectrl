@@ -34,7 +34,7 @@ public class UserController {
         User user = new User(name.strip());
         userService.save(user);
         redirectAttributes.addAttribute("userId",user.getId());
-        return "redirect:/expenses/home";
+        return "redirect:/expense/dashboard/{userId}";
     }
 
     @DeleteMapping("/delete")
