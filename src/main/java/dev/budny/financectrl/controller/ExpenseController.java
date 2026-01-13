@@ -2,36 +2,44 @@ package dev.budny.financectrl.controller;
 
 import dev.budny.financectrl.model.Expense;
 import dev.budny.financectrl.service.ExpenseService;
+import dev.budny.financectrl.service.UserService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
-@RequestMapping("/expense")
+@RequestMapping("/financectrl/expense")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final UserService userService;
 
     @Autowired
-    ExpenseController(ExpenseService expenseService){this.expenseService = expenseService;}
+    ExpenseController(ExpenseService expenseService, UserService userService){this.expenseService = expenseService;
+        this.userService = userService;
+    }
 
     @GetMapping("/dashboard/{userId}")
-    public String renderExpense(Model model, @PathVariable Long userId, @RequestParam(required = false) Integer month){
+    public String renderExpense(Model model, @PathVariable Long userId){
         List<Expense> expenseList = getAll(userId);
 
-        if(month == null){
-            month = LocalDate.now().getMonthValue();
-        }
+        int current_month = LocalDate.now().getMonthValue();
 
         model.addAttribute("expenses",expenseList);
         model.addAttribute("sum", expenseService.sumAllByUserId(userId));
-        model.addAttribute("month", month);
-        model.addAttribute("monthsum", expenseService.sumAllMonth(userId, month));
+        model.addAttribute("monthsum", expenseService.sumAllMonth(userId, current_month));
         model.addAttribute("userId", userId);
         return "dashboard";
     }
@@ -42,10 +50,10 @@ public class ExpenseController {
         return expenseService.save(expense);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @ResponseBody
-    public Expense update(@RequestBody Long id, @RequestBody String descr, @RequestBody BigDecimal value, @RequestBody LocalDate date){
-        return expenseService.update(id, descr, value, date);
+    public Expense update(@PathVariable Long id, @RequestBody Expense expense){
+        return expenseService.update(id, expense);
     }
 
     @GetMapping("/get/{userId}")
@@ -66,7 +74,22 @@ public class ExpenseController {
         expenseService.delete(id);
     }
 
-
+    @GetMapping("/download/{userId}")
+    public String download(@PathVariable Long userId, HttpServletResponse response){
+        response.setHeader("Content-Type", "text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"expenses.csv\"");
+        List<Expense> expenseList = expenseService.getAll(userId);
+        try{
+            response.getWriter().write("Description, Value, Date\n");
+            for(Expense e : expenseList){
+                response.getWriter().write(e.getDescr()+ ", " + e.getValue() + ", " + e.getDate() + "\n");
+                System.out.println(e);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/financectrl/expense/dashboard/{userId}";
+    }
 
 
 

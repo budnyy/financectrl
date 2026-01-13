@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/financectrl/user")
 public class UserController {
 
     private final UserService userService;
@@ -32,9 +32,10 @@ public class UserController {
     @PostMapping("/create")
     public String save(@RequestParam String name, RedirectAttributes redirectAttributes){
         User user = new User(name.strip());
-        userService.save(user);
-        redirectAttributes.addAttribute("userId",user.getId());
-        return "redirect:/expense/dashboard/{userId}";
+        User u = userService.save(user);
+
+        redirectAttributes.addAttribute("userId", u.getId());
+        return "redirect:/financectrl/expense/dashboard/{userId}";
     }
 
     @DeleteMapping("/delete")

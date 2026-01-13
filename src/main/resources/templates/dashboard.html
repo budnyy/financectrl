@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/styles/dashboard.css">
 </head>
 <body>
-
+    <h1 id="title">financectrl</h1>
     <div>
-        <h1>financectrl</h1>
         <h2>Expense dashboard</h2>
-        <h2 th:text="@{sum}"></h2>
-        <p th:text="@{monthsum}"></p>
+        <h2 th:text="'R$ ' + ${sum}"></h2>
+        <p th:text="'R$ ' + ${monthsum} + ' this month'"></p>
         <form id="changeMonth">
-            <label for="month">Change month</label>
-            <input type="month" name="month" id="month">
+            <label for="monthInput">Change month</label>
+            <input type="month" name="month" id="monthInput">
             <button type="submit">Submit</button>
         </form>
+        <button id="clearMonth" onclick="clearMonthButton()">Clear</button>
     </div>
     <div>
         <table id="getTable">
@@ -34,22 +35,25 @@
     <div>
         <h3>ADD/UPDATE/DELETE Expense</h3>
         <form id="expenseOp">
-            <input type="text" name="descrForm" id="descrExp">
-            <input type="number" name="valueForm" id="valueExp" step="0.01">
-            <input type="date" name="dateForm" id="dateExp">
+            <input type="text" name="descrForm" id="descrExp" required>
+            <input type="number" name="valueForm" id="valueExp" step="0.01" required>
+            <input type="date" name="dateForm" id="dateExp" required>
             <input type="hidden" name="userIdForm" id="userId" th:value="${userId}">
             <input type="hidden" name="idForm" id="idExp" value="">
             <button type="submit">Save</button>
         </form>
+        <button id="clearIdForm" onclick="resetForm()">Clear</button>
     </div>
     <div>
-        <h3>Download table as CSV file (not yet implemented)</h3>
-        <button>Download CSV</button>
+        <h3>Download table as CSV file</h3>
+        <a th:href="@{/financectrl/expense/download/{id}(id=${userId})}" download="expense.csv">
+            <button type="button">Download</button>
+        </a>
     </div>
-    <p id="test"></p>
     <script th:inline="javascript">
-        const currUID = [[${userId}]]
+        const currUID = /*[[${userId}]]*/ 'user-id'
     </script>
-    <script src="/js/dashboard.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/ui.js"></script>
 </body>
 </html>

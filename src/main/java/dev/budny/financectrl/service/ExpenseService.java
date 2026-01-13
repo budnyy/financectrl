@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -16,7 +14,8 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
 
     @Autowired
-    public ExpenseService(ExpenseRepository expenseRepository){
+    public ExpenseService(ExpenseRepository expenseRepository)
+    {
         this.expenseRepository = expenseRepository;
     }
 
@@ -26,16 +25,12 @@ public class ExpenseService {
     }
 
     //put
-    public Expense update(Long id, String desc, BigDecimal value, LocalDate date){
-        Optional<Expense> expenseOptional = expenseRepository.findById(id);
-        if(expenseOptional.isPresent()){
-            Expense expense = expenseOptional.get();
-            expense.setDescr(desc);
-            expense.setValue(value);
-            expense.setDate(date);
-            return expenseRepository.save(expense);
-        }
-        return null;
+    public Expense update(Long id, Expense newExpense){
+        Expense expense = expenseRepository.findById(id).get();
+        expense.setDescr(newExpense.getDescr());
+        expense.setValue(newExpense.getValue());
+        expense.setDate(newExpense.getDate());
+        return expenseRepository.save(expense);
     }
 
     //get all
@@ -51,11 +46,7 @@ public class ExpenseService {
     //get by month
     public List<Expense> getMonth(Long userId, int month){
         List<Expense> expenseListMonth = expenseRepository.getAllByUserId(userId);
-        for(Expense exp : expenseListMonth){
-            if(exp.getDate().getMonthValue() != month){
-                expenseListMonth.remove(exp);
-            }
-        }
+        expenseListMonth.removeIf(exp ->exp.getDate().getMonthValue() != month);
         return expenseListMonth;
     }
 

@@ -1,0 +1,23 @@
+html{
+    background-color: #000036;
+    color: white;
+    font-family: Arial, serif;
+}
+
+div{
+    width: 600px;
+    margin: 20px;
+    background-color: cornflowerblue;
+
+}
+
+.title{
+    background-color: #000036;
+    font-size: large;
+    margin: auto;
+}
+
+td{
+    background-color: #5d84cc;
+    padding: 2px;
+}

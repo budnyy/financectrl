@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,8 +22,11 @@ public class UserService {
 
     //create user
     public User save(User user){
-        if(validateUser(user.getName()) != null){
-            return null;
+        List<User> userList = userRepository.findAll();
+        for(User u : userList){
+            if (u.getName().equals(user.getName())){
+                return u;
+            }
         }
         return userRepository.save(user);
     }
@@ -31,15 +35,5 @@ public class UserService {
     public void delete(Long id){
         userRepository.deleteById(id);
         expenseService.deleteAll(id);
-    }
-
-    public Long validateUser(String name){
-        List<User> userList = userRepository.findAll();
-        for(User u : userList){
-            if (u.getName().equals(name)){
-                return u.getId();
-            }
-        }
-        return null;
     }
 }
