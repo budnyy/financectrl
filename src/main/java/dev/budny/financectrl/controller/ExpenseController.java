@@ -3,35 +3,26 @@ package dev.budny.financectrl.controller;
 import dev.budny.financectrl.model.Expense;
 import dev.budny.financectrl.service.ExpenseService;
 import dev.budny.financectrl.service.UserService;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/financectrl/expense")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
-    private final ServletResponse servletResponse;
 
     @Autowired
-    ExpenseController(ExpenseService expenseService, UserService userService, ServletResponse servletResponse){
+    ExpenseController(ExpenseService expenseService){
         this.expenseService = expenseService;
-        this.servletResponse = servletResponse;
     }
 
     @GetMapping("/dashboard/{userId}")
