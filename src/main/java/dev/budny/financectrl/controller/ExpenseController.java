@@ -2,8 +2,6 @@ package dev.budny.financectrl.controller;
 
 import dev.budny.financectrl.model.Expense;
 import dev.budny.financectrl.service.ExpenseService;
-import dev.budny.financectrl.service.UserService;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
