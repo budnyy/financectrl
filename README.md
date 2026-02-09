@@ -1,5 +1,7 @@
 # 💸 FinanceCTRL
 
+🌎 [Versão em português](/README.pt.md)
+
 ## 📌 Overview
 
 Web application aimed towards financial management, focused on expense tracking, real-time updates, and CSV export for external analysis tools.
