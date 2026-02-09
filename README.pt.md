@@ -1,7 +1,5 @@
 # 💸 FinanceCTRL
 
-🌎 [English version](/README.en.md)
-
 ## 📌 Resumo
 
 Aplicação web para controle financeiro, com foco em gerenciamento de despesas, atualizações em tempo real, e exportação em CSV para ferramentas de análise externas.
